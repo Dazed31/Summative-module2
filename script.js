@@ -46,7 +46,13 @@ form.addEventListener("submit", function (e) {
             let definition = def.definition;
             let part = meaning.partOfSpeech;
 
-            let example = def.example ? def.example : "no example found";
+            let example;
+
+                    if (def.example) {
+                        example = def.example;
+                    } else {
+                        example = "no example found";
+                    }
 
             let audio = "";
             if (wordData.phonetics && wordData.phonetics[0] && wordData.phonetics[0].audio) {
