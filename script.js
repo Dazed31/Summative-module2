@@ -1,48 +1,72 @@
-let form = document.getElementById("search-form");
+let form = document.getElementById("search-term");
 let input = document.getElementById("word-input");
 let result = document.getElementById("result");
 
+let toggleBtn = document.getElementById("toggle-theme");
+let spinner = document.getElementById("spinner");
 
-form.addEventListener("submit", function(e){
+// theme toggle 
+toggleBtn.addEventListener("click", function () {
+    if (document.body.classList.contains("dark")) {
+        document.body.classList.remove("dark");
+        document.body.classList.add("light");
+    } else {
+        document.body.classList.remove("light");
+        document.body.classList.add("dark");
+    }
+});
+
+// form submit
+form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     let word = input.value.trim();
 
-    if (word === ""){
-        result.innerHTML = "<p>Please enter a word</p>"
+    if (word === "") {
+        result.innerHTML = "<p>please enter a word</p>";
         return;
     }
 
+    spinner.style.display = "block";
+    result.innerHTML = "";
+
     fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
-      .then(function(res){
-        return res.json();
-      })
+        .then(function (res) {
+            if (!res.ok) {
+                throw new Error("word not found");
+            }
+            return res.json();
+        })
+        .then(function (data) {
 
-      .then(function(data){
-         
-        let wordData = data[0];
-        let meaning = wordData.meanings[0];
-        let definitionData = meaning.definitions[0];
-        let definition = definitionData.definition;
-        let part = meaning.partOfSpeech;
+            let wordData = data[0];
+            let meaning = wordData.meanings[0];
+            let def = meaning.definitions[0];
 
-        let example;
+            let definition = def.definition;
+            let part = meaning.partOfSpeech;
 
-        if(definitionData.example){
-            example = definitionData.example;
-        } else {
-            example = " No example available";
-        }
+            let example = def.example ? def.example : "no example found";
 
-        result.innerHTML = `
-           <h2>${word}</h2>
-           <p><strong>Part of Speech: </strong>${part}</p>
-           <p><strong>Definition: </strong>${definition}</p>
-           <p><strong>Example: </strong>${example}</p>
-        `;
-      })
-      .catch(function(){
-        result.innerHTML = "<p>Word not found</p>"
-      });
+            let audio = "";
+            if (wordData.phonetics && wordData.phonetics[0] && wordData.phonetics[0].audio) {
+                audio = `<audio controls src="${wordData.phonetics[0].audio}"></audio>`;
+            }
 
+            result.innerHTML =
+                "<h2>" + word + "</h2>" +
+                "<p><b>part of speech:</b> " + part + "</p>" +
+                "<p><b>definition:</b> " + definition + "</p>" +
+                "<p><b>example:</b> " + example + "</p>" +
+                audio;
+
+        })
+        .catch(function (err) {
+            result.innerHTML = "<p>" + err.message + "</p>";
+        })
+        .finally(function () {
+            spinner.style.display = "none";
+        });
+
+    input.value = "";
 });
