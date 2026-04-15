@@ -1,29 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wordly Dictionary</title>
-  <link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordly Dictionary</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="dark">
+<body>
 
-  <button id="toggle-theme">Toggle Theme</button>
+    
+    <button id="theme-toggle">Toggle Theme</button>
 
-  <h1>Wordly Dictionary</h1>
+    
+    <form id="search-term">
+        <input type="text" id="word-input" placeholder="Search a word...">
+        <button type="submit">Search</button>
+    </form>
 
-  <form id="search-term">
-    <input type="text" id="word-input" placeholder="Enter a word">
-    <button type="submit">Search</button>
-  </form>
+   
+    <div id="loading" class="hidden">Loading...</div>
 
-  <div id="spinner">Loading...</div>
+   
+    <div class="card" id="result"></div>
 
-  <div id="result"></div>
+  
+    <div class="top-row">
 
-  <!-- IMPORTANT: defer fixes JS loading -->
-  <script src="./script.js" defer></script>
+      
+        <div class="card">
+            <h3>Saved Words</h3>
+            <ul id="saved-words"></ul>
+        </div>
 
+       
+        <div class="card" id="synonyms-section">
+            <h3>Synonyms</h3>
+            <p id="synonyms"></p>
+        </div>
+
+       
+        <div class="card">
+            <h3>Word of the Day</h3>
+            <p id="wotd-word"></p>
+            <p id="wotd-def"></p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
