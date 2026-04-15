@@ -113,7 +113,7 @@ button:hover {
 
 
 #result:empty::before {
-    content: "Search a word to see results...";
+   
     color: gray;
 }
 
